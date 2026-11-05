@@ -173,6 +173,16 @@ fn fault_follows_step_without_dropping_the_failed_instruction() {
         run_trace(script, Some(hex!("01").into()), false),
         json!([["step", 0, "stack underflow"]])
     );
+    // PUSH1 0, PUSH1 0, REVERT
+    assert_eq!(
+        run_trace(script, Some(hex!("60006000fd").into()), false),
+        json!([
+            ["step", 0, null],
+            ["step", 2, null],
+            ["step", 4, null],
+            ["fault", 4, "execution reverted"]
+        ])
+    );
 }
 
 #[test]
